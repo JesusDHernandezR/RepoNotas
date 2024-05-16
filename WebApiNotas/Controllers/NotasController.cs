@@ -43,7 +43,7 @@ namespace WebApiNotas.Controllers
         }
 
         // PUT: api/Notas/5
-        // To protect from overposting attacks, see https://go.microsoft.com/fwlink/?linkid=2123754
+        
         [HttpPut("{id}")]
         public async Task<IActionResult> PutNote(int id, Note note)
         {
@@ -74,7 +74,6 @@ namespace WebApiNotas.Controllers
         }
 
         // POST: api/Notas
-        // To protect from overposting attacks, see https://go.microsoft.com/fwlink/?linkid=2123754
         [HttpPost]
         public async Task<ActionResult<Note>> PostNote(Note note)
         {

@@ -18,7 +18,6 @@ builder.Services.AddCors(options =>
                       });
 });
 
-// Add services to the container.
 // variable para la cadena de conexión
 var connectionString = builder.Configuration.GetConnectionString("Connection");
 // registrar servicio para la conexión
@@ -27,13 +26,12 @@ builder.Services.AddDbContext<AppDbContext>(
 );
 
 builder.Services.AddControllers();
-// Learn more about configuring Swagger/OpenAPI at https://aka.ms/aspnetcore/swashbuckle
 builder.Services.AddEndpointsApiExplorer();
 builder.Services.AddSwaggerGen();
 
 var app = builder.Build();
 
-// Configure the HTTP request pipeline.
+// HTTP
 if (app.Environment.IsDevelopment())
 {
     app.UseSwagger();
