@@ -1,26 +1,24 @@
+#Usa la imagen base de .NET SDK para construir la aplicación
 FROM mcr.microsoft.com/dotnet/sdk:8.0 AS build
 WORKDIR /app
 
-# Copiar archivos de proyecto y restaurar dependencias
-COPY *.csproj .
-COPY *.sln .
+#Copia los archivos de proyecto y restaura las dependencias
+COPY WebApiNotas.csproj ./
+
 RUN dotnet restore
 
-# Compilar la aplicación
-COPY . .
-RUN dotnet build
+#Copia el resto de los archivos y construye la aplicación
+COPY . ./
+RUN dotnet publish -c Release -o out
 
-# Establecer la imagen de trabajo como la imagen base ASP.NET Core
-FROM mcr.microsoft.com/dotnet/aspnetcore:8.0
-
+#Usa la imagen base de .NET Runtime para ejecutar la aplicación
+FROM mcr.microsoft.com/dotnet/aspnet:8.0
 WORKDIR /app
 
-# Copiar archivos binarios y el contenido web publicado
-COPY --from=build /app/bin .
-COPY --from=build /app/publish .
+COPY --from=build /app/out .
 
-# Exponer el puerto 3000
-EXPOSE 3000
+#Expone el puerto en el que la aplicación escuchará
+EXPOSE 80
 
-# Definir el punto de entrada para ejecutar la aplicación
-ENTRYPOINT ["dotnet", "WebApiNotass.dll"]
+#Define el comando de entrada para ejecutar la aplicación
+ENTRYPOINT ["dotnet", "WebApiNotas.dll"]
