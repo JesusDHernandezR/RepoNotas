@@ -32,10 +32,17 @@ builder.Services.AddSwaggerGen();
 var app = builder.Build();
 
 // HTTP
-if (app.Environment.IsDevelopment())
+if (app.Environment.IsDevelopment() || Environment.GetEnvironmentVariable("ASPNETCORE_ENVIRONMENT") == "Docker")
 {
     app.UseSwagger();
     app.UseSwaggerUI();
+    app.UseDeveloperExceptionPage();
+}
+
+// Only use HTTPS redirection outside of Docker
+if (!app.Environment.IsDevelopment() && Environment.GetEnvironmentVariable("ASPNETCORE_ENVIRONMENT") != "Docker")
+{
+    app.UseHttpsRedirection();
 }
 
 app.UseHttpsRedirection();
