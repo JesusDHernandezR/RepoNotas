@@ -3,12 +3,11 @@ FROM mcr.microsoft.com/dotnet/sdk:8.0 AS build
 WORKDIR /app
 
 #Copia los archivos de proyecto y restaura las dependencias
-COPY WebApiNotas.csproj ./
+COPY . ./
 
 RUN dotnet restore
 
-#Copia el resto de los archivos y construye la aplicación
-COPY . ./
+#construye la aplicación
 RUN dotnet publish -c Release -o out
 
 #Usa la imagen base de .NET Runtime para ejecutar la aplicación
