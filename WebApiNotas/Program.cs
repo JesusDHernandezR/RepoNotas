@@ -5,6 +5,13 @@ var MyAllowSpecificOrigins = "_myAllowSpecificOrigins";
 
 var builder = WebApplication.CreateBuilder(args);
 
+// Agregar configuración para Kestrel
+builder.WebHost.ConfigureKestrel(options =>
+{
+    options.ListenAnyIP(80); // Configura Kestrel para escuchar en el puerto 80
+});
+
+// Configuración de CORS, DbContext, servicios, etc.
 builder.Services.AddCors(options =>
 {
     options.AddPolicy(name: MyAllowSpecificOrigins,
@@ -18,9 +25,7 @@ builder.Services.AddCors(options =>
                       });
 });
 
-// variable para la cadena de conexión
 var connectionString = builder.Configuration.GetConnectionString("Connection");
-// registrar servicio para la conexión
 builder.Services.AddDbContext<AppDbContext>(
     options => options.UseSqlServer(connectionString)
 );
@@ -31,7 +36,6 @@ builder.Services.AddSwaggerGen();
 
 var app = builder.Build();
 
-// HTTP
 if (app.Environment.IsDevelopment() || Environment.GetEnvironmentVariable("ASPNETCORE_ENVIRONMENT") == "Docker")
 {
     app.UseSwagger();
@@ -39,13 +43,10 @@ if (app.Environment.IsDevelopment() || Environment.GetEnvironmentVariable("ASPNE
     app.UseDeveloperExceptionPage();
 }
 
-// Only use HTTPS redirection outside of Docker
 if (!app.Environment.IsDevelopment() && Environment.GetEnvironmentVariable("ASPNETCORE_ENVIRONMENT") != "Docker")
 {
     app.UseHttpsRedirection();
 }
-
-app.UseHttpsRedirection();
 
 app.UseAuthorization();
 app.UseCors(MyAllowSpecificOrigins);
