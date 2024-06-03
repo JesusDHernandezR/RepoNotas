@@ -18,7 +18,7 @@ WORKDIR /app
 COPY --from=build /app/out .
 
 #Expone el puerto en el que la aplicación escuchará
-EXPOSE 44364
+EXPOSE 80
 
 #Define el comando de entrada para ejecutar la aplicación
 ENTRYPOINT ["dotnet", "WebApiNotas.dll"]
